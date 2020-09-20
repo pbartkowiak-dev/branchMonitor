@@ -12,6 +12,10 @@
 - _Refresh list_ button for manual update
 - shows time of the last update
 
+## Requirements
+- Node.js
+- Git
+
 ## How to
 
 1. Checkout the repo on your drive.
