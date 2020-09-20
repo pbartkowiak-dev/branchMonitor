@@ -8,7 +8,7 @@
 		"server": "node backend/server.js",
 		"build": "webpack"
 	},
-	"author": "",
+	"author": "pbartkowiak",
 	"license": "ISC",
 	"dependencies": {
 		"express": "^4.17.1",
