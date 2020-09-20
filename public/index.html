@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Branch Monitor</title>
+	<link rel="stylesheet" href="./index.css">
+</head>
+
+<body>
+	<div class="content">
+		<h1>Branch Monitor</h1>
+		<p>Add git directory to monitor the current branch.</p>
+		<p>
+			<form data-add-repo-form>
+				<div class="input-group">
+					<label for="Name">Name:</label><br>
+					<input data-add-repo-name type="text" class="input input--name">
+				</div>
+				<div class="input-group">
+					<label for="Directory">Directory:</label><br>
+					<input data-add-repo-dir type="text" class="input">
+				</div>
+				<button
+					type="submit"
+					class="button button--success">Add</button>
+				<button
+					data-btn-refresh
+					class="button button--info">Refresh list</button>	
+			</form>
+
+		</p>
+		<div id="list-container">
+		</div>
+	</div>
+
+	<template id="repo-table-tpl">
+		<div class="table-container">
+			<p class="table__last-update">Last update: <span data-last-update></span></p>
+			<div class="table">
+				<div data-table-header class="table__row table__row--header">
+					<div data-cell="name" class="table__cell table__cell--header">Name</div>
+					<div data-cell="branch" class="table__cell table__cell--header">Branch</div>
+					<div data-cell="dir" class="table__cell table__cell--header">Directory</div>
+					<div data-cell="remove" class="table__cell table__cell--header"></div>
+				</div>
+				<div data-table-row class="table__row">
+					<div data-cell="name" class="table__cell"></div>
+					<div data-cell="branch" class="table__cell"><span class="pill" data-branch-name></span></div>
+					<div data-cell="dir" class="table__cell"></div>
+					<div data-cell="remove" class="table__cell"><button data-button-remove
+							class="button button--danger">Remove</button></div>
+				</div>
+			</div>
+		</div>
+	</template>
+
+	<script src="bundle.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,151 @@
+* {
+	box-sizing: content-box;
+	font-family: consolas, 'Courier New', Courier, monospace;
+}
+
+body {
+	display: flex;
+	justify-content: center;
+	font-size: 16px;
+}
+
+.content {
+	max-width: 980px;
+	width: 100%;
+	padding: 10px 20px;
+}
+
+.table {
+	width: 100%;
+	border: 1px solid #aeaeae;
+	font-size: 95%;
+}
+
+.table__last-update {
+	margin: 5px 0 2px;
+}
+
+.table__row {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	border-bottom: 1px solid #aeaeae;
+}
+
+.table__row--inactive {
+	color: #7a7a7a;
+	font-style: italic;
+}
+
+.table__row--header {
+	background: #f4f4f4;
+}
+
+.table__row:last-of-type {
+	border-bottom: 0;
+}
+
+.table__cell {
+	padding: 5px 10px;
+	display: flex;
+	align-items: center;
+}
+
+.table__cell[data-cell="name"] {
+	width: 200px;
+}
+
+.table__cell[data-cell="branch"] {
+	width: 200px;
+}
+
+.table__cell[data-cell="dir"] {
+	width: 380px;
+}
+
+.table__cell[data-cell="remove"] {
+	width: 100px;
+	justify-content: center;
+}
+
+.table__cell[data-cell="edit"] {
+	width: 100px;
+	justify-content: center;
+}
+
+.table__cell--header {
+	font-weight: bold;
+}
+
+.button {
+	min-width: 65px;
+	display: inline-block;
+	text-decoration: none;
+	padding: 6px;
+	cursor: pointer;
+	color: #fff;
+	border: 0;
+	text-align: center;
+	border-radius: 3px;
+	font-size: 15px;
+}
+
+.button--danger {
+	background: #dc3545;
+}
+
+.button--danger:hover {
+	background: #ec707c
+}
+
+.button--success {
+	background: #28a745;
+}
+
+.button--success:hover {
+	background: #52dc71;
+}
+
+.button--info {
+	background: #007bff;
+}
+
+.button--info:hover {
+	background: #87b4e4;
+}
+
+.pill {
+	color: #212529;
+	background-color: #ffc107;
+	padding-right: .6em;
+	padding-left: .6em;
+	border-radius: 10rem;
+	display: inline-block;
+	white-space: nowrap;
+	font-weight: bold;
+}
+
+form {
+	padding: 10px;
+	background: #f4f4f4;
+	border: 1px solid #aeaeae;
+}
+
+form .button {
+	margin-right: 10px;
+}
+
+.input-group {
+	margin-bottom: 10px;
+	color: black;
+}
+
+.input {
+	height: 20px;
+	padding: 5px;
+	width: calc(100% - 20px);
+}
+
+.input--name {
+	width: 250px;
+}
