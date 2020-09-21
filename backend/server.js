@@ -27,6 +27,21 @@ app.post('/add', (req, res) => {
 		.catch(err => res.status(500).send(err));
 });
 
+app.post('/updateOne', (req, res) => {
+	database.updateOne(
+		req.body.id,
+		req.body.key,
+		req.body.value
+	)
+	.then((result) => {
+		res.send(result);
+	})
+	.catch((err) => {
+		console.error(err);
+		res.status(500).send(err);
+	});
+});
+
 app.get('/updateAll', (req, res) => {
 	database.updateAll()
 		.then((result) => {

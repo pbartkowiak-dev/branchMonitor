@@ -1,4 +1,5 @@
 import getTime from './getTime';
+import colors, { getNextColor } from './colors';
 
 export default class List {
 	constructor(rootId, templateId) {
@@ -29,6 +30,7 @@ export default class List {
 		for (let repo of this.repoList) {
 			// Add rows
 			const newRow = tableRow.cloneNode(true);
+
 			newRow.querySelector('[data-cell="name"]').textContent = repo.name;
 			newRow.querySelector('[data-branch-name]').textContent = repo.branch;
 			newRow.querySelector('[data-cell="dir"]').textContent = repo.dir;
@@ -38,8 +40,43 @@ export default class List {
 				() => this.remove(repo.id)
 			);
 
-			if (!repo.branch) {
-				newRow.classList.add('table__row--inactive')
+			if (repo.branch) {
+				const pill = newRow.querySelector('[data-branch-name]');
+				switch (Number(repo.color)) {
+					case colors.ORANGE:
+						pill.classList.add('pill--orange');
+						break;
+					case colors.BLUE:
+						pill.classList.add('pill--blue');
+						break;
+					case colors.GREEN:
+						pill.classList.add('pill--green');
+						break;
+					case colors.DARK:
+						pill.classList.add('pill--dark');
+						break;
+					case colors.AQUA:
+						pill.classList.add('pill--aqua');
+						break;
+					case colors.RED:
+						pill.classList.add('pill--red');
+						break;
+					case colors.GRAY:
+						pill.classList.add('pill--gray');
+						break;
+					default:
+						break;
+				}
+				pill.addEventListener('click', () => {
+					this.updateRow(
+						repo.id,
+						'color',
+						getNextColor(repo.color)
+					);
+				});
+			} else {
+				// Gray out the row
+				newRow.classList.add('table__row--inactive');
 			}
 
 			// Append rows
@@ -53,8 +90,7 @@ export default class List {
 		tableRow.parentNode.removeChild(tableRow);
 
 		// Attach updated table to the DOM
-		this.attach(newElement)
-
+		this.attach(newElement);
 	}
 
 	attach(newElement) {
@@ -80,7 +116,19 @@ export default class List {
 			},
 			body: JSON.stringify(newRepo)
 		})
-		.then(_ => this.render())
-		.catch(e => console.error(e));
+			.then(_ => this.render())
+			.catch(e => console.error(e));
+	}
+
+	updateRow(id, key, value) {
+		fetch('/updateOne', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8'
+			},
+			body: JSON.stringify({ id, key, value })
+		})
+			.then(_ => this.render())
+			.catch(e => console.error(e));
 	}
 }

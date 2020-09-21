@@ -21,9 +21,10 @@ class Database {
 	
 	init() {
 		this.connect();
+		// 'order' is a reserved word and cannot be used as a col name
 		this.db.run(`
 			CREATE TABLE IF NOT EXISTS
-				repo_list(id, name, branch, dir)
+				repo_list(id, name, branch, dir, color, _order)
 			`);
 		this.close();
 	}
@@ -33,8 +34,14 @@ class Database {
 		return new Promise((resolve, reject) => {
 			this.db.run(`
 				INSERT INTO
-					repo_list(id, name, branch, dir)
-				VALUES('${data.id}', '${data.name}', '${data.branch}', '${data.dir}')
+					repo_list(id, name, branch, dir, color, _order)
+				VALUES('${data.id}',
+					'${data.name}',
+					'${data.branch}',
+					'${data.dir}',
+					'${data.color}',
+					'${data.order}'
+				)
 			`, (err) => {
 				if (err) {
 					reject(err.message);
@@ -73,9 +80,31 @@ class Database {
 				} catch (e) {
 					console.log(`Git repo not found in ${row.dir}`);
 				}
-				this.db.run(`UPDATE repo_list SET branch = '${name}' WHERE id = '${row.id}'`);
-				resolve('Row updated');
+				this.db.run(`
+					UPDATE
+						repo_list
+					SET
+						branch = '${name}'
+					WHERE
+						id = '${row.id}'
+					`);
+				resolve(`Row ${row.id} updated`);
 			}
+			this.close();
+		});
+	}
+
+	updateOne(id, key, value) {
+		this.connect();
+		return new Promise(async (resolve) => {
+			this.db.run(`
+				UPDATE
+					repo_list
+				SET
+					${key} = '${value}'
+				WHERE id = '${id}'
+			`);
+			resolve(`Row ${id} updated`);
 			this.close();
 		});
 	}

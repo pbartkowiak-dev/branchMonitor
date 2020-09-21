@@ -13,8 +13,10 @@ document.querySelector('[data-add-repo-form]').addEventListener('submit',(e) => 
 		name: nameInput.value.trim(),
 		dir: dirInput.value.trim(),
 		branch: '',
-		id: Date.now()
-	}
+		id: Date.now(),
+		color: 0,
+		order: ''
+	};
 
 	// clear inputs
 	nameInput.value = '';

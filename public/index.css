@@ -90,39 +90,64 @@ body {
 	font-size: 15px;
 }
 
-.button--danger {
-	background: #dc3545;
+.button:hover {
+	opacity: .8;
 }
 
-.button--danger:hover {
-	background: #ec707c
+.button--danger {
+	background: #dc3545;
 }
 
 .button--success {
 	background: #28a745;
 }
 
-.button--success:hover {
-	background: #52dc71;
-}
-
 .button--info {
 	background: #007bff;
 }
 
-.button--info:hover {
-	background: #87b4e4;
-}
-
 .pill {
-	color: #212529;
-	background-color: #ffc107;
+	color: #fff;
 	padding-right: .6em;
 	padding-left: .6em;
 	border-radius: 10rem;
 	display: inline-block;
 	white-space: nowrap;
 	font-weight: bold;
+	cursor: pointer;
+}
+
+.pill:hover {
+	opacity: .8;
+}
+
+.pill--orange {
+	color: #212529;
+	background: #ffc107;
+}
+
+.pill--blue {
+	background: #007bff;
+}
+
+.pill--green {
+	background-color: #28a745;
+}
+
+.pill--dark {
+	background-color: #343a40;
+}
+
+.pill--aqua {
+	background-color: #17a2b8;
+}
+
+.pill--red {
+	background: #dc3545;
+}
+
+.pill--gray {
+	background: #6c757d;
 }
 
 form {
