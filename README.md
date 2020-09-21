@@ -11,6 +11,7 @@
 - auto refreshes every 5 minutes
 - _Refresh list_ button for manual update
 - shows time of the last update
+- branch pills with different colors
 
 ## Requirements
 - Node.js
