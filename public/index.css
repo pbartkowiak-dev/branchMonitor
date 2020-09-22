@@ -1,5 +1,5 @@
 * {
-	box-sizing: content-box;
+	box-sizing: border-box;
 	font-family: consolas, 'Courier New', Courier, monospace;
 }
 
@@ -52,7 +52,7 @@ body {
 }
 
 .table__cell[data-cell="name"] {
-	width: 200px;
+	width: 180px;
 }
 
 .table__cell[data-cell="branch"] {
@@ -60,11 +60,12 @@ body {
 }
 
 .table__cell[data-cell="dir"] {
-	width: 380px;
+	width: 400px;
 }
 
+.table__cell[data-cell="open"],
 .table__cell[data-cell="remove"] {
-	width: 100px;
+	width: 90px;
 	justify-content: center;
 }
 
@@ -78,7 +79,7 @@ body {
 }
 
 .button {
-	min-width: 65px;
+	min-width: 60px;
 	display: inline-block;
 	text-decoration: none;
 	padding: 6px;
@@ -166,7 +167,7 @@ form .button {
 }
 
 .input {
-	height: 20px;
+	height: 35px;
 	padding: 5px;
 	width: calc(100% - 20px);
 }

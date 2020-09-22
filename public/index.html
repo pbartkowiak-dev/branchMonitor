@@ -53,14 +53,23 @@
 					<div data-cell="name" class="table__cell table__cell--header">Name</div>
 					<div data-cell="branch" class="table__cell table__cell--header">Branch</div>
 					<div data-cell="dir" class="table__cell table__cell--header">Directory</div>
+					<div data-cell="open" class="table__cell table__cell--header"></div>
 					<div data-cell="remove" class="table__cell table__cell--header"></div>
 				</div>
 				<div data-table-row class="table__row">
 					<div data-cell="name" class="table__cell"></div>
 					<div data-cell="branch" class="table__cell"><span class="pill" data-branch-name></span></div>
 					<div data-cell="dir" class="table__cell"></div>
-					<div data-cell="remove" class="table__cell"><button data-button-remove
-							class="button button--danger">Remove</button></div>
+					<div data-cell="open" class="table__cell">
+						<button
+							data-button-open
+							class="button button--info">Open</button>
+					</div>
+					<div data-cell="remove" class="table__cell">
+						<button
+							data-button-remove
+							class="button button--danger">Remove</button>
+					</div>
 				</div>
 			</div>
 		</div>

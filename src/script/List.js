@@ -35,9 +35,12 @@ export default class List {
 			newRow.querySelector('[data-branch-name]').textContent = repo.branch;
 			newRow.querySelector('[data-cell="dir"]').textContent = repo.dir;
 
-			newRow.querySelector('[data-button-remove]').addEventListener(
-				'click',
+			newRow.querySelector('[data-button-remove]').addEventListener('click',
 				() => this.remove(repo.id)
+			);
+
+			newRow.querySelector('[data-button-open]').addEventListener('click',
+				() => this.openCmd(repo.dir)
 			);
 
 			if (repo.branch) {
@@ -129,6 +132,18 @@ export default class List {
 			body: JSON.stringify({ id, key, value })
 		})
 			.then(_ => this.render())
+			.catch(e => console.error(e));
+	}
+
+	openCmd(dir) {
+		fetch('/openCmd', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8'
+			},
+			body: JSON.stringify({ dir })
+		})
+			.then(_ => {})
 			.catch(e => console.error(e));
 	}
 }

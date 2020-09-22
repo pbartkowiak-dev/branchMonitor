@@ -1,6 +1,7 @@
 const express = require('express')
 const Database = require('./database');
 const branch = require('git-branch');
+const child_process = require('child_process');
 
 const app = express();
 const port = 3333;
@@ -73,6 +74,21 @@ app.get('/remove', (req, res) => {
 			console.error(err);
 			res.status(500).send(err);
 		});
+});
+
+app.post('/openCmd', (req, res) => {
+	const { dir } = req.body;
+	var child_process = require('child_process');
+	if (dir) {
+		try {
+			child_process.exec(`start cmd.exe /k "cd /d ${dir}"`);
+			res.send(`Directory ${dir} opened in another window.`);
+		} catch (e) {
+			res.status(500).send(`Cannot open ${dir}:`, e);
+		}
+	} else {
+		res.status(500).send(`Directory wasn't specified`);
+	}
 });
 
 

@@ -12,6 +12,7 @@
 - _Refresh list_ button for manual update
 - shows time of the last update
 - branch pills with different colors
+- can open directory in `cmd` window
 
 ## Requirements
 - Node.js
