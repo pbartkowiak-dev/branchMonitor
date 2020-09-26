@@ -36,3 +36,10 @@ const fiveMinutes = 300000 ;
 setInterval(() => {
 	list.update.call(list, true);
 }, fiveMinutes);
+
+// init feater icons
+// https://github.com/feathericons/feather
+feather.replace({
+	width: 16,
+	height: 16,
+});
