@@ -21,10 +21,9 @@ class Database {
 	
 	init() {
 		this.connect();
-		// 'order' is a reserved word and cannot be used as a col name
 		this.db.run(`
 			CREATE TABLE IF NOT EXISTS
-				repo_list(id, name, branch, dir, color, _order)
+				repo_list(id, name, branch, dir, color, position)
 			`);
 		this.close();
 	}
@@ -34,13 +33,13 @@ class Database {
 		return new Promise((resolve, reject) => {
 			this.db.run(`
 				INSERT INTO
-					repo_list(id, name, branch, dir, color, _order)
+					repo_list(id, name, branch, dir, color, position)
 				VALUES('${data.id}',
 					'${data.name}',
 					'${data.branch}',
 					'${data.dir}',
 					'${data.color}',
-					'${data.order}'
+					'${data.position}'
 				)
 			`, (err) => {
 				if (err) {
@@ -57,7 +56,7 @@ class Database {
 	getAll(keepConnection) {
 		this.connect();
 		return new Promise((resolve, reject) => {
-			this.db.all(`SELECT * FROM repo_list ORDER BY id`, (err, rows) => {
+			this.db.all(`SELECT * FROM repo_list ORDER BY position DESC`, (err, rows) => {
 				if (err) {
 					reject(err.message);
 				} else {
@@ -89,6 +88,24 @@ class Database {
 						id = '${row.id}'
 					`);
 				resolve(`Row ${row.id} updated`);
+			}
+			this.close();
+		});
+	}
+
+	updateListOrder(rows) {
+		this.connect();
+		return new Promise(async (resolve) => {
+			for (let row of rows) {
+				this.db.run(`
+					UPDATE
+						repo_list
+					SET
+						position = '${row.position}'
+					WHERE
+						id = '${row.id}'
+					`);
+				resolve(`Row ${row.id} updated. New position: ${row.position}.`);
 			}
 			this.close();
 		});

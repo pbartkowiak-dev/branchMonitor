@@ -11,8 +11,9 @@
 - auto refreshes every 5 minutes
 - _Refresh list_ button for manual update
 - shows time of the last update
-- branch pills with different colors
+- branch pills with __different colors__
 - can open directory in `cmd` window
+- possibility to change item order on the list by ___drag and drop___
 
 ## Requirements
 - Node.js

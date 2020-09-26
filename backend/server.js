@@ -54,6 +54,17 @@ app.get('/updateAll', (req, res) => {
 		});
 });
 
+app.post('/updateListOrder', (req, res) => {
+	database.updateListOrder(req.body)
+		.then((result) => {
+			res.send(result);
+		})
+		.catch((err) => {
+			console.error(err);
+			res.status(500).send(err);
+		});
+});
+
 app.get('/getRepoList', (req, res) => {
 	database.getAll.call(database)
 		.then((result) => {

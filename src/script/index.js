@@ -15,7 +15,7 @@ document.querySelector('[data-add-repo-form]').addEventListener('submit',(e) => 
 		branch: '',
 		id: Date.now(),
 		color: 0,
-		order: ''
+		position: ''
 	};
 
 	// clear inputs

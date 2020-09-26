@@ -21,19 +21,65 @@ export default class List {
 		}
 	}
 
+	async updateListOrder(draggedRowId, closestElementId, position) {
+		const repoListNewOrder = [...this.repoList];
+		const draggedItemIndex = repoListNewOrder.findIndex(element => {
+			return element.id === draggedRowId;
+		});
+		const closestElementIndex = repoListNewOrder.findIndex(element => {
+			return element.id === closestElementId;
+		});
+		const draggedItem = repoListNewOrder.splice(draggedItemIndex, 1)[0];
+		let newIndex;
+
+		if (position === 'below') {
+			newIndex = closestElementIndex + 1;
+		} else {
+			newIndex = closestElementIndex - 1;
+		}
+
+		if (newIndex < 0 ) {
+			newIndex = 0;
+		}
+
+		repoListNewOrder.splice(newIndex, 0, draggedItem);
+		const repoListNewOrderMapped = repoListNewOrder.map((item, index) => {
+			return {
+				...item,
+				// position: index + 1
+				position: repoListNewOrder.length - index
+			};
+		});
+		const listShort = repoListNewOrderMapped.map(({ id , position }) => {
+			return { id, position };
+		});
+
+		this.repoList = [...repoListNewOrderMapped];
+
+		fetch('/updateListOrder', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8'
+			},
+			body: JSON.stringify(listShort)
+		})
+			.then(_ => {})
+			.catch(e => console.error(e));
+	}
+
 	async render() {
 		const newElement = this.template.firstElementChild.cloneNode(true);
 		const tableRow = newElement.querySelector('[data-table-row]');
+		const tableBody = newElement.querySelector('[data-table-body]');
 
 		const response = await fetch('/getRepoList');
 		this.repoList = await response.json();
 
-		// for (let repo of this.repoList) {
-		for (const [index, repo] of this.repoList.entries()) {
+		for (const repo of this.repoList) {
 			// Add rows
 			const newRow = tableRow.cloneNode(true);
 
-			newRow.dataset.rowNumber = Number(index) + 1;
+			newRow.dataset.rowId = repo.id;
 
 			newRow.querySelector('[data-cell="name"]').textContent = repo.name;
 			newRow.querySelector('[data-branch-name]').textContent = repo.branch;
@@ -87,7 +133,7 @@ export default class List {
 			}
 
 			// Append rows
-			tableRow.insertAdjacentElement('afterend', newRow);
+			tableBody.insertAdjacentElement('beforeend', newRow);
 		}
 
 		// Update last update time
@@ -124,6 +170,15 @@ export default class List {
 	}
 
 	add(newRepo) {
+		// add position number
+		newRepo.position = this.repoList.reduce((resultSoFar, item) => {
+			const positionNum = Number(item.position);
+			if (positionNum >= resultSoFar) {
+				return positionNum + 1;
+			}
+			return resultSoFar;
+		}, 1);
+
 		this.repoList.push(newRepo);
 		fetch('/add', {
 			method: 'POST',
@@ -169,6 +224,7 @@ export default class List {
 		let draggedElement;
 		let position = 'below';
 		let draggableElementsInTable;
+		let draggedRowId;
 
 		for (const dragHandle of dragHandles) {
 			dragHandle.addEventListener('mouseover', (event) => {
@@ -187,15 +243,28 @@ export default class List {
 					return false;
 				}
 
+				draggedRowId = draggable.dataset.rowId;
+
 				draggable.classList.add('dragging');
 				draggable.dataset.dragging = true;
 
-				draggableElementsInTable = document.querySelectorAll('[data-table-row]:not([data-dragging])');
+				draggableElementsInTable = document
+					.querySelectorAll('[data-table-row]:not([data-dragging])');
 			});
 
 			draggable.addEventListener('dragend', () => {
 				draggable.classList.remove('dragging');
 				draggable.removeAttribute('data-dragging');
+
+				this.updateListOrder(
+					draggedRowId,
+					closestElement.dataset.rowId,
+					position
+				);
+
+				draggedRowId = null;
+				closestElement = null;
+				draggedElement = null;
 			});
 		}
 
