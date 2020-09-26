@@ -50,27 +50,31 @@
 			<p class="table__last-update">Last update: <span data-last-update></span></p>
 			<div class="table">
 				<div data-table-header class="table__row table__row--header">
+					<div data-cell="drag" class="table__cell table__cell--header"></div>
 					<div data-cell="name" class="table__cell table__cell--header">Name</div>
 					<div data-cell="branch" class="table__cell table__cell--header">Branch</div>
 					<div data-cell="dir" class="table__cell table__cell--header">Directory</div>
 					<div data-cell="open" class="table__cell table__cell--header"></div>
 					<div data-cell="remove" class="table__cell table__cell--header"></div>
 				</div>
-				<div data-table-row class="table__row">
-					<div data-cell="name" class="table__cell"></div>
-					<div data-cell="branch" class="table__cell"><span class="pill" data-branch-name></span></div>
-					<div data-cell="dir" class="table__cell"></div>
-					<div data-cell="open" class="table__cell">
-						<button
-							data-button-open
-							class="button button--info"><i data-feather="terminal"></i></button>
+				<div data-table-body>
+					<div data-table-row class="table__row" data-row-number="1">
+						<div data-cell="drag" class="table__cell"><i data-feather="menu" data-drag-handle class="drag-icon"></i></div>
+						<div data-cell="name" class="table__cell"></div>
+						<div data-cell="branch" class="table__cell"><span class="pill" data-branch-name></span></div>
+						<div data-cell="dir" class="table__cell"></div>
+						<div data-cell="open" class="table__cell">
+							<button
+								data-button-open
+								class="button button--info"><i data-feather="terminal"></i></button>
+						</div>
+						<div data-cell="remove" class="table__cell">
+							<button
+								data-button-remove
+								class="button button--danger"><i data-feather="trash-2"></i></button>
+						</div>
 					</div>
-					<div data-cell="remove" class="table__cell">
-						<button
-							data-button-remove
-							class="button button--danger"><i data-feather="trash-2"></i></button>
-					</div>
-				</div>
+				</div>	
 			</div>
 		</div>
 	</template>

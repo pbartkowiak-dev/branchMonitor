@@ -1,4 +1,5 @@
 import getTime from './getTime';
+import throttle from './throttle';
 import colors, { getNextColor } from './colors';
 
 export default class List {
@@ -9,10 +10,10 @@ export default class List {
 		this.repoList = [];
 		this.lastUpdate = '';
 
-		this.update(true);
+		this.updateListData(true);
 	}
 
-	async update(shouldRenderAfterUpdate) {
+	async updateListData(shouldRenderAfterUpdate) {
 		await fetch('/updateAll');
 		if (shouldRenderAfterUpdate) {
 			this.lastUpdate = getTime();
@@ -27,9 +28,12 @@ export default class List {
 		const response = await fetch('/getRepoList');
 		this.repoList = await response.json();
 
-		for (let repo of this.repoList) {
+		// for (let repo of this.repoList) {
+		for (const [index, repo] of this.repoList.entries()) {
 			// Add rows
 			const newRow = tableRow.cloneNode(true);
+
+			newRow.dataset.rowNumber = Number(index) + 1;
 
 			newRow.querySelector('[data-cell="name"]').textContent = repo.name;
 			newRow.querySelector('[data-branch-name]').textContent = repo.branch;
@@ -101,6 +105,8 @@ export default class List {
 			width: 16,
 			height: 16,
 		});
+
+		this.draggableInit();
 	}
 
 	attach(newElement) {
@@ -152,5 +158,82 @@ export default class List {
 		})
 			.then(_ => {})
 			.catch(e => console.error(e));
+	}
+
+	draggableInit() {
+		const dragHandles = document.querySelectorAll('[data-drag-handle]');
+		const draggables = document.querySelectorAll('[data-table-row]');
+		const tableBody = document.querySelector('[data-table-body]');
+		
+		let closestElement;
+		let draggedElement;
+		let position = 'below';
+		let draggableElementsInTable;
+
+		for (const dragHandle of dragHandles) {
+			dragHandle.addEventListener('mouseover', (event) => {
+				event.target.closest('[data-table-row]').setAttribute("draggable", true);
+			});
+			dragHandle.addEventListener('mouseout', (event) => {
+				event.target.closest('[data-table-row]').setAttribute("draggable", false)
+			});
+		}
+
+		for (const draggable of draggables) {
+			draggable.addEventListener('dragstart', (event) => {
+				const isDraggable = event.target.closest('[data-table-row]').getAttribute('draggable');
+				if (!isDraggable || isDraggable === 'false') {
+					event.preventDefault();
+					return false;
+				}
+
+				draggable.classList.add('dragging');
+				draggable.dataset.dragging = true;
+
+				draggableElementsInTable = document.querySelectorAll('[data-table-row]:not([data-dragging])');
+			});
+
+			draggable.addEventListener('dragend', () => {
+				draggable.classList.remove('dragging');
+				draggable.removeAttribute('data-dragging');
+			});
+		}
+
+		tableBody.addEventListener('dragover', throttle(event => {
+			event.preventDefault();
+			const cursorPosition = event.clientY;
+			draggedElement = document.querySelector('[data-dragging]');
+
+			let smallestDistance;
+
+			for (const el of draggableElementsInTable) {
+				const { height, y } = el.getBoundingClientRect();
+				const elPosition =  y + parseInt(height / 2, 10);
+				const distanceFromCursor = Math.abs(cursorPosition - elPosition);
+
+				if (typeof smallestDistance === 'undefined' || distanceFromCursor < smallestDistance ) {
+					smallestDistance = distanceFromCursor;
+					closestElement = el;
+			
+				}
+			}
+
+			const { height, y } = closestElement.getBoundingClientRect();
+			const closestElementPosition =  y + parseInt(height / 2, 10);
+			if (cursorPosition >= closestElementPosition) {
+				position = 'below';
+			} else {
+				position = 'above';
+			}
+
+			if (closestElement) {
+				if (position === 'below') {
+					closestElement.insertAdjacentElement('afterend', draggedElement);
+				} else if (position === 'above') {
+					closestElement.insertAdjacentElement('beforebegin', draggedElement);
+				}
+			}
+
+		}, 200));
 	}
 }

@@ -28,13 +28,13 @@ document.querySelector('[data-add-repo-form]').addEventListener('submit',(e) => 
 
 document.querySelector('[data-btn-refresh]').addEventListener('click',(e) => {
 	e.preventDefault();
-	list.update.call(list, true);
+	list.updateListData.call(list, true);
 });
 
 const fiveMinutes = 300000 ;
 
 setInterval(() => {
-	list.update.call(list, true);
+	list.updateListData.call(list, true);
 }, fiveMinutes);
 
 // init feater icons
