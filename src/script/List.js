@@ -94,6 +94,13 @@ export default class List {
 
 		// Attach updated table to the DOM
 		this.attach(newElement);
+
+		// init feater icons
+		// https://github.com/feathericons/feather
+		feather.replace({
+			width: 16,
+			height: 16,
+		});
 	}
 
 	attach(newElement) {
