@@ -34,20 +34,23 @@ class Database {
 			this.db.run(`
 				INSERT INTO
 					repo_list(id, name, branch, dir, color, position)
-				VALUES('${data.id}',
-					'${data.name}',
-					'${data.branch}',
-					'${data.dir}',
-					'${data.color}',
-					'${data.position}'
-				)
-			`, (err) => {
-				if (err) {
-					reject(err.message);
-				} else {
-					resolve('Repo added successfully');
-				}
-				this.close();
+				VALUES
+					(?, ?, ?, ?, ?, ?)
+			`, [
+				`${data.id}`,
+				`${data.name}`,
+				`${data.branch}`,
+				`${data.dir}`,
+				`${data.color}`,
+				`${data.position}`
+			],
+				(err) => {
+					if (err) {
+						reject(err.message);
+					} else {
+						resolve('Repo added successfully');
+					}
+					this.close();
 			});
 		});
 
