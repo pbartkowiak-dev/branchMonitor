@@ -228,15 +228,42 @@ export default class List {
 
 		for (const dragHandle of dragHandles) {
 			dragHandle.addEventListener('mouseover', (event) => {
-				event.target.closest('[data-table-row]').setAttribute("draggable", true);
+				event.target.closest('[data-table-row]').setAttribute('draggable', true);
 			});
 			dragHandle.addEventListener('mouseout', (event) => {
-				event.target.closest('[data-table-row]').setAttribute("draggable", false)
+				event.target.closest('[data-table-row]').setAttribute('draggable', false)
+			});
+			dragHandle.addEventListener('dragover', (event) => {
+				event.dataTransfer.dropEffect = 'move';
+			});
+			dragHandle.addEventListener('dragleave', (event) => {
+				event.dataTransfer.dropEffect = 'move';
+			});
+			dragHandle.addEventListener('dragenter', (event) => {
+				event.dataTransfer.dropEffect = 'move';
+			});
+		}
+
+		const dataCells = document.querySelectorAll('[data-cell]');
+		for (const dataCell of dataCells) {
+			dataCell.addEventListener('dragover', (event) => {
+				event.preventDefault();
+				event.dataTransfer.dropEffect = 'move';
+			});
+			dataCell.addEventListener('dragenter', (event) => {
+				event.preventDefault();
+				event.dataTransfer.dropEffect = 'move';
+			});
+			dataCell.addEventListener('dragleave', (event) => {
+				event.preventDefault();
+				event.dataTransfer.dropEffect = 'move';
 			});
 		}
 
 		for (const draggable of draggables) {
 			draggable.addEventListener('dragstart', (event) => {
+				event.dataTransfer.effectAllowed = 'move';
+
 				const isDraggable = event.target.closest('[data-table-row]').getAttribute('draggable');
 				if (!isDraggable || isDraggable === 'false') {
 					event.preventDefault();
@@ -266,10 +293,17 @@ export default class List {
 				closestElement = null;
 				draggedElement = null;
 			});
+
+			draggable.addEventListener('dragover', (event) => {
+				event.preventDefault();
+				event.dataTransfer.dropEffect = 'move';
+			});
 		}
 
 		tableBody.addEventListener('dragover', throttle(event => {
 			event.preventDefault();
+			event.dataTransfer.dropEffect = 'move';
+
 			const cursorPosition = event.clientY;
 			draggedElement = document.querySelector('[data-dragging]');
 
