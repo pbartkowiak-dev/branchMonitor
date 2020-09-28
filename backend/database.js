@@ -75,24 +75,42 @@ class Database {
 		return new Promise(async (resolve) => {
 			const rows = await this.getAll(true);
 
-			for (let row of rows) {
-				let name = '';
-				try {
-					name = branch.sync(row.dir);
-				} catch (e) {
-					console.log(`Git repo not found in ${row.dir}`);
-				}
-				this.db.run(`
-					UPDATE
-						repo_list
-					SET
-						branch = '${name}'
-					WHERE
-						id = '${row.id}'
-					`);
-				resolve(`Row ${row.id} updated`);
-			}
-			this.close();
+			// Create promises
+			const rowsPromise = rows.map((row) => {
+				return new Promise(async (resolve, reject) => {
+					try {
+						const branchName = await branch(row.dir);
+						resolve({
+							branchName,
+							id: row.id
+						});
+					} catch (e) {
+						reject(`Git repo not found in ${row.dir}`);
+					}
+				});
+			});
+
+			//  Consume promises, update db
+			resolve(Promise.all(rowsPromise)
+				.then((repos) => {
+					for (const repo of repos) {
+						this.db.run(`
+							UPDATE
+								repo_list
+							SET
+								branch = ?
+							WHERE
+								id = ?
+						`, [
+							`${repo.branchName}`,
+							`${repo.id}`
+						]);
+						console.log(`Row ${repo.id} updated`);
+					}
+				})
+				.then(_ => this.close())
+				.catch((e) => console.error(e))
+			);			
 		});
 	}
 
