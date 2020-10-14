@@ -63,7 +63,12 @@ class Database {
 				if (err) {
 					reject(err.message);
 				} else {
-					resolve(rows);
+					if (rows && rows.length) {
+						const rowsSorted = rows.sort((a, b) => b.position - a.position);
+						resolve(rowsSorted);
+					} else {
+						resolve([]);
+					}
 				}
 			});
 			if (!keepConnection) this.close();
@@ -105,12 +110,11 @@ class Database {
 							`${repo.branchName}`,
 							`${repo.id}`
 						]);
-						console.log(`Row ${repo.id} updated`);
 					}
 				})
 				.then(_ => this.close())
 				.catch((e) => console.error(e))
-			);			
+			);
 		});
 	}
 

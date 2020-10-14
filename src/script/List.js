@@ -46,7 +46,6 @@ export default class List {
 		const repoListNewOrderMapped = repoListNewOrder.map((item, index) => {
 			return {
 				...item,
-				// position: index + 1
 				position: repoListNewOrder.length - index
 			};
 		});
